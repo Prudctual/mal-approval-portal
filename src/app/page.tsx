@@ -272,8 +272,9 @@ export default function Home() {
 
           </div>
 
-          <div className="text-center text-[10px] text-[#86868b]">
-            Secure Client Connection: <span className="text-emerald-600 font-semibold">Active &amp; Connected</span>
+          <div className="text-center text-[10px] text-[#86868b] space-y-1">
+            <div>Secure Client Connection: <span className="text-emerald-600 font-semibold">Active &amp; Connected</span></div>
+            <div className="text-[11px] pt-1">Built with 🖤 by <span className="font-semibold text-[#1d1d1f]">Jasim Kareem</span></div>
           </div>
 
         </div>
@@ -624,6 +625,11 @@ export default function Home() {
           </aside>
 
         </div>
+
+        {/* Footer Credit */}
+        <footer className="mt-12 pt-6 border-t border-[#d2d2d7]/30 text-center text-xs text-[#86868b] pb-4">
+          <p>Built with 🖤 by <span className="font-semibold text-[#1d1d1f]">Jasim Kareem</span></p>
+        </footer>
       </div>
 
       {/* Decision Dialog Modal (Apple styled sheet) */}
