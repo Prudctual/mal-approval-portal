@@ -15,7 +15,11 @@ import {
   Info,
   ChevronRight,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  Lock,
+  LogOut,
+  ArrowRight,
+  Key
 } from 'lucide-react';
 
 interface RequestItem {
@@ -33,11 +37,14 @@ interface RequestItem {
 }
 
 export default function Home() {
+  // Auth states
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState<'developer' | 'manager'>('developer');
+  const [currentUser, setCurrentUser] = useState('');
+  
   // App states
   const [requests, setRequests] = useState<RequestItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState<'developer' | 'manager'>('developer');
-  const [currentUser, setCurrentUser] = useState('dev_sami@mal.ai');
   
   // Form states
   const [title, setTitle] = useState('');
@@ -55,15 +62,6 @@ export default function Home() {
 
   // Budget states
   const BUDGET_CAP = 100000;
-
-  // Sync user with role selection
-  useEffect(() => {
-    if (role === 'developer') {
-      setCurrentUser('dev_sami@mal.ai');
-    } else {
-      setCurrentUser('lead_fatima@mal.ai');
-    }
-  }, [role]);
 
   // Load data from Supabase
   const loadRequests = async () => {
@@ -86,6 +84,23 @@ export default function Home() {
   useEffect(() => {
     loadRequests();
   }, []);
+
+  // Quick Login handler
+  const handleLogin = (selectedRole: 'developer' | 'manager') => {
+    setRole(selectedRole);
+    if (selectedRole === 'developer') {
+      setCurrentUser('dev_sami@mal.ai');
+    } else {
+      setCurrentUser('lead_fatima@mal.ai');
+    }
+    setIsLoggedIn(true);
+  };
+
+  // Logout handler
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setCurrentUser('');
+  };
 
   // Handle new request submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -177,30 +192,115 @@ export default function Home() {
   const budgetProgress = (totalApproved / BUDGET_CAP) * 100;
   const pendingCount = requests.filter(r => r.status === 'pending').length;
 
+  // LOGIN PAGE COMPONENT
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-[#fafafa] text-[#111111] font-sans flex flex-col justify-center items-center p-4 selection:bg-black selection:text-white">
+        
+        {/* Decorative background grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30 pointer-events-none"></div>
+
+        <div className="w-full max-w-xl relative z-10 space-y-8">
+          
+          {/* Logo & Headline */}
+          <div className="text-center space-y-2">
+            <div className="inline-flex items-center justify-center p-2.5 bg-white border border-zinc-200 rounded-xl shadow-sm mb-2">
+              <Lock className="w-6 h-6 text-zinc-900" />
+            </div>
+            <h1 className="text-3xl font-extrabold tracking-tight text-black">
+              Mal.ai <span className="text-zinc-300 font-light">/</span> Gatekeeper
+            </h1>
+            <p className="text-sm text-zinc-500 max-w-sm mx-auto">
+              Secured single-sign-on provisioning portal for retail banking tools.
+            </p>
+          </div>
+
+          {/* Cards Grid for Roles */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* Developer Box */}
+            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-zinc-400 transition-all group">
+              <div>
+                <div className="w-10 h-10 bg-zinc-50 border border-zinc-200 rounded-lg flex items-center justify-center mb-4">
+                  <Terminal className="w-5 h-5 text-zinc-800" />
+                </div>
+                <h2 className="text-base font-bold text-black flex items-center gap-1.5">
+                  Developer Portal <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-1 transition-transform" />
+                </h2>
+                <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
+                  Submit resource requests, verify API access codes, and monitor approvals.
+                </p>
+                <div className="mt-4 bg-zinc-50 border border-zinc-200/60 rounded-lg p-2.5">
+                  <div className="text-[10px] uppercase font-mono font-bold text-zinc-400">Testing Email</div>
+                  <div className="text-xs font-mono text-zinc-700 font-bold mt-0.5">dev_sami@mal.ai</div>
+                </div>
+              </div>
+              <button 
+                onClick={() => handleLogin('developer')}
+                className="w-full bg-black text-white hover:bg-zinc-900 font-semibold text-xs py-2.5 rounded-lg transition-colors mt-6 flex items-center justify-center gap-1.5"
+              >
+                <Key className="w-3.5 h-3.5" /> Fast Login
+              </button>
+            </div>
+
+            {/* Manager Box */}
+            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-zinc-400 transition-all group">
+              <div>
+                <div className="w-10 h-10 bg-zinc-50 border border-zinc-200 rounded-lg flex items-center justify-center mb-4">
+                  <Shield className="w-5 h-5 text-zinc-800" />
+                </div>
+                <h2 className="text-base font-bold text-black flex items-center gap-1.5">
+                  Approver Console <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-1 transition-transform" />
+                </h2>
+                <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
+                  Review pending developer requests, check department DBR limits, and authorize allocations.
+                </p>
+                <div className="mt-4 bg-zinc-50 border border-zinc-200/60 rounded-lg p-2.5">
+                  <div className="text-[10px] uppercase font-mono font-bold text-zinc-400">Testing Email</div>
+                  <div className="text-xs font-mono text-zinc-700 font-bold mt-0.5">lead_fatima@mal.ai</div>
+                </div>
+              </div>
+              <button 
+                onClick={() => handleLogin('manager')}
+                className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 border border-zinc-200 font-semibold text-xs py-2.5 rounded-lg transition-colors mt-6 flex items-center justify-center gap-1.5"
+              >
+                <Key className="w-3.5 h-3.5" /> Fast Login
+              </button>
+            </div>
+
+          </div>
+
+          <div className="text-center text-xs text-zinc-400">
+            Secure connection to Supabase DB: <span className="text-emerald-600 font-semibold">Active & Live</span>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+  // PORTAL WORKSPACE COMPONENT
   return (
     <div className="min-h-screen bg-[#fafafa] text-[#111111] font-sans selection:bg-black selection:text-white pb-12">
-      {/* Floating Demo Banner */}
+      
+      {/* Top Navigation Bar with Logout */}
       <div className="bg-white border-b border-zinc-200 px-4 py-3 sticky top-0 z-50 backdrop-blur-md bg-opacity-90 shadow-sm">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="bg-zinc-100 text-zinc-800 border border-zinc-200 px-2.5 py-0.5 rounded text-xs font-mono font-bold">DEMO INTERACTIVE MODE</span>
-            <p className="text-xs text-zinc-500 font-medium">Switch personas to request or approve dynamically.</p>
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase font-mono tracking-wider border ${
+              role === 'developer' ? 'bg-zinc-100 text-zinc-800 border-zinc-200' : 'bg-purple-50 text-purple-800 border-purple-200'
+            }`}>
+              {role === 'developer' ? 'Developer Workspace' : 'Manager Console'}
+            </span>
+            <span className="text-xs text-zinc-400 font-mono hidden sm:inline">| {currentUser}</span>
           </div>
           
-          <div className="flex bg-zinc-100 p-1 rounded-lg border border-zinc-200">
-            <button 
-              onClick={() => setRole('developer')}
-              className={`flex items-center gap-1.5 px-3.5 py-1 rounded-md text-xs font-semibold transition-all ${role === 'developer' ? 'bg-white text-black shadow-sm' : 'text-zinc-500 hover:text-zinc-800'}`}
-            >
-              <User className="w-3.5 h-3.5" /> Developer
-            </button>
-            <button 
-              onClick={() => setRole('manager')}
-              className={`flex items-center gap-1.5 px-3.5 py-1 rounded-md text-xs font-semibold transition-all ${role === 'manager' ? 'bg-white text-black shadow-sm' : 'text-zinc-500 hover:text-zinc-800'}`}
-            >
-              <Shield className="w-3.5 h-3.5" /> Manager
-            </button>
-          </div>
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 border border-transparent hover:border-zinc-200 rounded-lg text-xs font-semibold transition-all"
+          >
+            <LogOut className="w-3.5 h-3.5" /> Sign Out
+          </button>
         </div>
       </div>
 
@@ -216,10 +316,6 @@ export default function Home() {
             <p className="text-sm text-zinc-500 mt-2 max-w-xl">
               Clean dashboard for requesting and reviewing developer budgets, security tokens, and hardware assets.
             </p>
-          </div>
-          <div className="text-right">
-            <div className="text-[10px] text-zinc-400 uppercase font-mono tracking-wider font-bold">Active User</div>
-            <div className="text-sm text-zinc-700 font-bold mt-0.5 font-mono">{currentUser}</div>
           </div>
         </header>
 
@@ -474,18 +570,18 @@ export default function Home() {
           {/* RIGHT COLUMN: Sidebar info */}
           <aside className="lg:col-span-4 space-y-6">
             
-            {/* Quick Demo Accounts */}
+            {/* Quick Session Info */}
             <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-              <h3 className="text-xs font-bold mb-3 uppercase tracking-wider font-mono text-zinc-400">Test Personas</h3>
+              <h3 className="text-xs font-bold mb-3 uppercase tracking-wider font-mono text-zinc-400">Current Session</h3>
               <div className="space-y-3 text-xs">
                 <div>
-                  <div className="text-zinc-400 font-mono font-semibold">Developer View (Requester)</div>
-                  <div className="font-mono text-zinc-800 font-bold mt-0.5">dev_sami@mal.ai</div>
+                  <div className="text-zinc-400 font-mono font-semibold">User Role</div>
+                  <div className="font-mono text-zinc-800 font-bold mt-0.5 capitalize">{role}</div>
                 </div>
                 <hr className="border-zinc-100" />
                 <div>
-                  <div className="text-zinc-400 font-mono font-semibold">Manager View (Approver)</div>
-                  <div className="font-mono text-zinc-800 font-bold mt-0.5">lead_fatima@mal.ai</div>
+                  <div className="text-zinc-400 font-mono font-semibold">Session Email</div>
+                  <div className="font-mono text-zinc-800 font-bold mt-0.5">{currentUser}</div>
                 </div>
               </div>
             </div>
