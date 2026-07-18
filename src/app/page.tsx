@@ -63,7 +63,7 @@ export default function Home() {
   // Budget states
   const BUDGET_CAP = 100000;
 
-  // Load data from Supabase
+  // Load data
   const loadRequests = async () => {
     try {
       setLoading(true);
@@ -82,7 +82,7 @@ export default function Home() {
     loadRequests();
   }, []);
 
-  // Quick Login handler
+  // Quick Login
   const handleLogin = (selectedRole: 'developer' | 'manager') => {
     setRole(selectedRole);
     if (selectedRole === 'developer') {
@@ -93,13 +93,13 @@ export default function Home() {
     setIsLoggedIn(true);
   };
 
-  // Logout handler
+  // Logout
   const handleLogout = () => {
     setIsLoggedIn(false);
     setCurrentUser('');
   };
 
-  // Handle new request submission
+  // Handle submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
@@ -182,91 +182,94 @@ export default function Home() {
   const budgetProgress = (totalApproved / BUDGET_CAP) * 100;
   const pendingCount = requests.filter(r => r.status === 'pending').length;
 
-  // COMMON TEXT INPUT CLASSPATH
-  const inputClass = "w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none focus:border-transparent";
+  // COMMON CLASSES
+  const inputClass = "w-full bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-xs text-zinc-800 transition-[border-color,box-shadow] duration-150 focus-visible:ring-1 focus-visible:ring-black outline-none focus:border-zinc-400";
+  const labelClass = "block text-[10px] text-zinc-400 uppercase font-mono mb-1 font-semibold tracking-wider";
 
   // LOGIN PAGE COMPONENT
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#fafafa] text-[#111111] font-sans flex flex-col justify-center items-center p-4 selection:bg-black selection:text-white">
+      <div className="min-h-screen bg-[#fafafa] text-[#111111] font-sans flex flex-col justify-center items-center p-4 selection:bg-black selection:text-white antialiased">
         
         {/* Decorative background grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30 pointer-events-none" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 pointer-events-none" aria-hidden="true"></div>
 
-        <div className="w-full max-w-xl relative z-10 space-y-8">
+        <div className="w-full max-w-md relative z-10 space-y-6">
           
           {/* Logo & Headline */}
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center p-2.5 bg-white border border-zinc-200 rounded-xl shadow-sm mb-2">
-              <Lock className="w-6 h-6 text-zinc-900" aria-hidden="true" />
+            <div className="inline-flex items-center justify-center p-2 bg-white border border-zinc-200 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] mb-1">
+              <Lock className="w-5 h-5 text-zinc-900" aria-hidden="true" />
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-black text-balance">
+            <h1 className="text-xl font-bold tracking-tight text-black text-balance">
               Mal.ai <span className="text-zinc-300 font-light" aria-hidden="true">/</span> Gatekeeper
             </h1>
-            <p className="text-sm text-zinc-500 max-w-sm mx-auto">
+            <p className="text-xs text-zinc-400 max-w-xs mx-auto">
               Secured single-sign-on provisioning portal for retail banking tools.
             </p>
           </div>
 
-          {/* Cards Grid for Roles */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Cards for Roles (Compact & Sleek) */}
+          <div className="space-y-4">
             
             {/* Developer Box */}
-            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-zinc-400 transition-[border-color] duration-200 group">
-              <div>
-                <div className="w-10 h-10 bg-zinc-50 border border-zinc-200 rounded-lg flex items-center justify-center mb-4">
-                  <Terminal className="w-5 h-5 text-zinc-800" aria-hidden="true" />
+            <div className="bg-white border border-zinc-200/80 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-zinc-300 hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow] duration-200 group">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-zinc-50 border border-zinc-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Terminal className="w-4 h-4 text-zinc-600" aria-hidden="true" />
                 </div>
-                <h2 className="text-base font-bold text-black flex items-center gap-1.5">
-                  Developer Portal 
-                  <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-1 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" aria-hidden="true" />
-                </h2>
-                <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
-                  Submit resource requests, verify API access codes, and monitor approvals.
-                </p>
-                <div className="mt-4 bg-zinc-50 border border-zinc-200/60 rounded-lg p-2.5">
-                  <div className="text-[10px] uppercase font-mono font-bold text-zinc-400">Testing Email</div>
-                  <div className="text-xs font-mono text-zinc-700 font-bold mt-0.5 select-all">dev_sami@mal.ai</div>
+                <div className="space-y-1.5 flex-1 min-w-0">
+                  <h2 className="text-xs font-bold text-zinc-950 flex items-center gap-1">
+                    Developer Workspace
+                    <ArrowRight className="w-3 h-3 text-zinc-400 group-hover:translate-x-0.5 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" aria-hidden="true" />
+                  </h2>
+                  <p className="text-[11px] text-zinc-400 leading-relaxed">
+                    Submit resource requests, verify API access codes, and monitor approvals.
+                  </p>
+                  <div className="bg-zinc-50 border border-zinc-200/50 rounded-lg p-2 flex items-center justify-between text-[11px]">
+                    <span className="font-mono text-zinc-400">dev_sami@mal.ai</span>
+                    <button 
+                      onClick={() => handleLogin('developer')}
+                      className="bg-black text-white hover:bg-zinc-900 active:scale-[0.96] font-semibold px-3 py-1 rounded-md transition-[background-color,transform] duration-150 text-[10px] flex items-center gap-1 focus-visible:ring-1 focus-visible:ring-black outline-none"
+                    >
+                      <Key className="w-3 h-3" aria-hidden="true" /> Enter Portal
+                    </button>
+                  </div>
                 </div>
               </div>
-              <button 
-                onClick={() => handleLogin('developer')}
-                className="w-full bg-black text-white hover:bg-zinc-900 font-semibold text-xs py-2.5 rounded-lg transition-colors duration-150 mt-6 flex items-center justify-center gap-1.5 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none"
-              >
-                <Key className="w-3.5 h-3.5" aria-hidden="true" /> Fast Login
-              </button>
             </div>
 
             {/* Manager Box */}
-            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-zinc-400 transition-[border-color] duration-200 group">
-              <div>
-                <div className="w-10 h-10 bg-zinc-50 border border-zinc-200 rounded-lg flex items-center justify-center mb-4">
-                  <Shield className="w-5 h-5 text-zinc-800" aria-hidden="true" />
+            <div className="bg-white border border-zinc-200/80 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-zinc-300 hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow] duration-200 group">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-zinc-50 border border-zinc-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Shield className="w-4 h-4 text-zinc-600" aria-hidden="true" />
                 </div>
-                <h2 className="text-base font-bold text-black flex items-center gap-1.5">
-                  Approver Console 
-                  <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-1 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" aria-hidden="true" />
-                </h2>
-                <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
-                  Review pending developer requests, check department DBR limits, and authorize allocations.
-                </p>
-                <div className="mt-4 bg-zinc-50 border border-zinc-200/60 rounded-lg p-2.5">
-                  <div className="text-[10px] uppercase font-mono font-bold text-zinc-400">Testing Email</div>
-                  <div className="text-xs font-mono text-zinc-700 font-bold mt-0.5 select-all">lead_fatima@mal.ai</div>
+                <div className="space-y-1.5 flex-1 min-w-0">
+                  <h2 className="text-xs font-bold text-zinc-950 flex items-center gap-1">
+                    Approver Console
+                    <ArrowRight className="w-3 h-3 text-zinc-400 group-hover:translate-x-0.5 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" aria-hidden="true" />
+                  </h2>
+                  <p className="text-[11px] text-zinc-400 leading-relaxed">
+                    Review pending developer requests, check department DBR limits, and authorize allocations.
+                  </p>
+                  <div className="bg-zinc-50 border border-zinc-200/50 rounded-lg p-2 flex items-center justify-between text-[11px]">
+                    <span className="font-mono text-zinc-400">lead_fatima@mal.ai</span>
+                    <button 
+                      onClick={() => handleLogin('manager')}
+                      className="bg-zinc-100 hover:bg-zinc-200 text-zinc-800 border border-zinc-200 active:scale-[0.96] font-semibold px-3 py-1 rounded-md transition-[background-color,border-color,transform] duration-150 text-[10px] flex items-center gap-1 focus-visible:ring-1 focus-visible:ring-zinc-400 outline-none"
+                    >
+                      <Key className="w-3 h-3" aria-hidden="true" /> Enter Portal
+                    </button>
+                  </div>
                 </div>
               </div>
-              <button 
-                onClick={() => handleLogin('manager')}
-                className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 border border-zinc-200 font-semibold text-xs py-2.5 rounded-lg transition-colors duration-150 mt-6 flex items-center justify-center gap-1.5 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none"
-              >
-                <Key className="w-3.5 h-3.5" aria-hidden="true" /> Fast Login
-              </button>
             </div>
 
           </div>
 
-          <div className="text-center text-xs text-zinc-400">
-            Secure connection to Supabase DB: <span className="text-emerald-600 font-semibold">Active &amp; Live</span>
+          <div className="text-center text-[10px] text-zinc-400">
+            Secure client link: <span className="text-emerald-600 font-semibold">Active &amp; Connected</span>
           </div>
 
         </div>
@@ -276,111 +279,111 @@ export default function Home() {
 
   // PORTAL WORKSPACE COMPONENT
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#111111] font-sans selection:bg-black selection:text-white pb-12">
+    <div className="min-h-screen bg-[#fafafa] text-[#111111] font-sans selection:bg-black selection:text-white pb-12 antialiased">
       
-      {/* Skip to Main Content Link for Keyboard A11y */}
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-black text-white px-4 py-2 rounded-lg text-xs font-semibold z-50">
+      {/* Skip Link for A11y */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 bg-black text-white px-3 py-1.5 rounded-lg text-xs font-semibold z-50">
         Skip to main content
       </a>
 
       {/* Top Navigation Bar with Logout */}
-      <div className="bg-white border-b border-zinc-200 px-4 py-3 sticky top-0 z-50 backdrop-blur-md bg-opacity-90 shadow-sm">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase font-mono tracking-wider border ${
+      <div className="bg-white border-b border-zinc-200/80 px-4 py-2 sticky top-0 z-50 backdrop-blur-md bg-opacity-95 shadow-[0_1px_2px_rgba(0,0,0,0.01)]">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase font-mono tracking-wider border ${
               role === 'developer' ? 'bg-zinc-100 text-zinc-800 border-zinc-200' : 'bg-purple-50 text-purple-800 border-purple-200'
             }`}>
-              {role === 'developer' ? 'Developer Workspace' : 'Manager Console'}
+              {role === 'developer' ? 'Developer' : 'Manager'}
             </span>
-            <span className="text-xs text-zinc-400 font-mono hidden sm:inline" aria-label={`Logged in as ${currentUser}`}>
+            <span className="text-[11px] text-zinc-400 font-mono hidden sm:inline" aria-label={`Logged in as ${currentUser}`}>
               | {currentUser}
             </span>
           </div>
           
           <button 
             onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 border border-transparent hover:border-zinc-200 rounded-lg text-xs font-semibold transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none"
+            className="flex items-center gap-1 px-2.5 py-1 text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 active:scale-[0.96] rounded-md text-xs font-medium transition-[background-color,color,transform] duration-150 focus-visible:ring-1 focus-visible:ring-black outline-none"
           >
-            <LogOut className="w-3.5 h-3.5" aria-hidden="true" /> Sign Out
+            <LogOut className="w-3 h-3" aria-hidden="true" /> Sign Out
           </button>
         </div>
       </div>
 
       {/* Main Container */}
-      <div className="max-w-6xl mx-auto px-4 mt-8" id="main-content">
+      <div className="max-w-5xl mx-auto px-4 mt-6 animate-fade-in" id="main-content">
         
-        {/* Header Block */}
-        <header className="mb-8 border-b border-zinc-200 pb-6">
-          <h1 className="text-3xl font-extrabold tracking-tight text-black flex items-center gap-2 text-balance">
-            Mal.ai <span className="text-zinc-300 text-2xl font-light" aria-hidden="true">/</span> <span className="font-semibold text-zinc-700">Provisioning Portal</span>
+        {/* Header Block (Compact & Professional) */}
+        <header className="mb-6 border-b border-zinc-200/60 pb-4">
+          <h1 className="text-xl font-bold tracking-tight text-zinc-950 flex items-center gap-2 text-balance">
+            Mal.ai <span className="text-zinc-300 text-lg font-light" aria-hidden="true">/</span> <span className="font-semibold text-zinc-700">Provisioning Portal</span>
           </h1>
-          <p className="text-sm text-zinc-500 mt-2 max-w-xl text-balance">
-            Clean dashboard for requesting and reviewing developer budgets, security tokens, and hardware assets.
+          <p className="text-xs text-zinc-400 mt-1 max-w-xl text-balance">
+            Departmental budget orchestration, API tokens, and hardware provisioning.
           </p>
         </header>
 
-        {/* Stats Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" aria-label="System Metrics Summary">
+        {/* Stats Grid (Extremely clean, smaller cards) */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" aria-label="Department Metrics">
           {/* Card 1: Approved Allocation */}
-          <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm relative overflow-hidden">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-zinc-400 font-bold uppercase font-mono tracking-wider">Approved Spending</span>
-              <DollarSign className="w-4 h-4 text-zinc-500" aria-hidden="true" />
+          <div className="bg-white border border-zinc-200/80 rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] relative overflow-hidden">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] text-zinc-400 font-bold uppercase font-mono tracking-wider">Approved Funding</span>
+              <DollarSign className="w-3.5 h-3.5 text-zinc-400" aria-hidden="true" />
             </div>
-            <div className="text-2xl font-bold font-mono text-zinc-900">AED {totalApproved.toLocaleString()}</div>
-            <div className="text-xs text-zinc-500 mt-1">out of AED {BUDGET_CAP.toLocaleString()} cap</div>
+            <div className="text-lg font-bold font-mono text-zinc-900 font-variant-numeric-tabular-nums">AED {totalApproved.toLocaleString()}</div>
+            <div className="text-[10px] text-zinc-500 mt-0.5">Limit: AED {BUDGET_CAP.toLocaleString()}</div>
             {/* Progress Bar */}
-            <div className="w-full bg-zinc-100 rounded-full h-2 mt-4 overflow-hidden border border-zinc-200" aria-hidden="true">
+            <div className="w-full bg-zinc-50 rounded-full h-1 mt-3 overflow-hidden border border-zinc-100" aria-hidden="true">
               <div 
-                className="bg-black h-2 rounded-full transition-[width] duration-500 ease-out" 
+                className="bg-black h-1 rounded-full transition-[width] duration-500 ease-out" 
                 style={{ width: `${Math.min(budgetProgress, 100)}%` }}
               ></div>
             </div>
           </div>
 
           {/* Card 2: Pending Volume */}
-          <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm relative overflow-hidden">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-zinc-400 font-bold uppercase font-mono tracking-wider">Pending Approvals Volume</span>
-              <TrendingUp className="w-4 h-4 text-zinc-500" aria-hidden="true" />
+          <div className="bg-white border border-zinc-200/80 rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] relative overflow-hidden">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] text-zinc-400 font-bold uppercase font-mono tracking-wider">Pending Volume</span>
+              <TrendingUp className="w-3.5 h-3.5 text-zinc-400" aria-hidden="true" />
             </div>
-            <div className="text-2xl font-bold font-mono text-zinc-900">AED {totalPending.toLocaleString()}</div>
-            <div className="text-xs text-zinc-500 mt-1">across {pendingCount} requests in queue</div>
-            <div className="mt-4 flex items-center gap-1.5 text-xs text-zinc-600 font-semibold">
-              <AlertCircle className="w-3.5 h-3.5 text-zinc-400" aria-hidden="true" /> Action required
+            <div className="text-lg font-bold font-mono text-zinc-900 font-variant-numeric-tabular-nums">AED {totalPending.toLocaleString()}</div>
+            <div className="text-[10px] text-zinc-500 mt-0.5">Queue items: {pendingCount}</div>
+            <div className="mt-3 flex items-center gap-1 text-[10px] text-zinc-500 font-semibold" aria-hidden="true">
+              <AlertCircle className="w-3 h-3 text-zinc-400" /> System active
             </div>
           </div>
 
-          {/* Card 3: System Status */}
-          <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm relative overflow-hidden">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-zinc-400 font-bold uppercase font-mono tracking-wider">Sharia Compliance Score</span>
-              <Terminal className="w-4 h-4 text-zinc-500" aria-hidden="true" />
+          {/* Card 3: Compliance */}
+          <div className="bg-white border border-zinc-200/80 rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] relative overflow-hidden">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] text-zinc-400 font-bold uppercase font-mono tracking-wider">Sharia Score</span>
+              <Terminal className="w-3.5 h-3.5 text-zinc-400" aria-hidden="true" />
             </div>
-            <div className="text-2xl font-bold font-mono text-zinc-900">100%</div>
-            <div className="text-xs text-zinc-500 mt-1">all disbursements verified</div>
-            <div className="mt-4 flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
-              <CheckCircle className="w-3.5 h-3.5 text-emerald-500" aria-hidden="true" /> All systems operational
+            <div className="text-lg font-bold font-mono text-zinc-900">100%</div>
+            <div className="text-[10px] text-zinc-500 mt-0.5">Ledger audit active</div>
+            <div className="mt-3 flex items-center gap-1 text-[10px] text-emerald-700 font-semibold" aria-hidden="true">
+              <CheckCircle className="w-3 h-3 text-emerald-500" /> Certified
             </div>
           </div>
         </section>
 
         {/* Dynamic Workspace Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* LEFT COLUMN: Role-specific tools */}
-          <main className="lg:col-span-8 space-y-8">
+          {/* LEFT COLUMN: Role-specific actions */}
+          <main className="lg:col-span-8 space-y-6">
             {role === 'developer' ? (
-              /* DEVELOPER WORKSPACE: Submit Request */
-              <div className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-zinc-800 text-balance">
-                  <PlusCircle className="w-5 h-5 text-zinc-500" aria-hidden="true" /> Create Budget or Access Request
+              /* DEVELOPER: Create Request Form */
+              <div className="bg-white border border-zinc-200/80 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                <h2 className="text-sm font-bold mb-4 flex items-center gap-2 text-zinc-950">
+                  <PlusCircle className="w-4 h-4 text-zinc-500" aria-hidden="true" /> File Allocation Request
                 </h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="space-y-3.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label htmlFor="request-title" className="block text-xs text-zinc-500 uppercase font-mono mb-1.5 font-bold">Request Title *</label>
+                      <label htmlFor="request-title" className={labelClass}>Request Title *</label>
                       <input 
                         id="request-title"
                         type="text" 
@@ -395,7 +398,7 @@ export default function Home() {
                     </div>
                     
                     <div>
-                      <label htmlFor="request-category" className="block text-xs text-zinc-500 uppercase font-mono mb-1.5 font-bold">Category</label>
+                      <label htmlFor="request-category" className={labelClass}>Category</label>
                       <select 
                         id="request-category"
                         value={category}
@@ -411,7 +414,7 @@ export default function Home() {
 
                   {category !== 'access' && (
                     <div>
-                      <label htmlFor="request-amount" className="block text-xs text-zinc-500 uppercase font-mono mb-1.5 font-bold">Amount Requested (AED) *</label>
+                      <label htmlFor="request-amount" className={labelClass}>Amount Requested (AED) *</label>
                       <input 
                         id="request-amount"
                         type="number" 
@@ -426,14 +429,14 @@ export default function Home() {
                   )}
 
                   <div>
-                    <label htmlFor="request-description" className="block text-xs text-zinc-500 uppercase font-mono mb-1.5 font-bold">Justification &amp; Context *</label>
+                    <label htmlFor="request-description" className={labelClass}>Justification &amp; Context *</label>
                     <textarea 
                       id="request-description"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Detail the use-case, partner endpoints, and vendor parameters…"
-                      rows={4}
-                      className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none focus:border-transparent resize-none"
+                      rows={3}
+                      className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-xs text-zinc-800 transition-[border-color,box-shadow] duration-150 focus-visible:ring-1 focus-visible:ring-black outline-none focus:border-zinc-400 resize-none"
                       required
                       spellCheck={true}
                       autoComplete="off"
@@ -442,7 +445,7 @@ export default function Home() {
 
                   {formMessage && (
                     <div 
-                      className={`p-3 rounded-lg text-xs font-semibold border ${formMessage.type === 'success' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-red-50 text-red-800 border-red-200'}`}
+                      className={`p-2.5 rounded-lg text-xs font-medium border ${formMessage.type === 'success' ? 'bg-emerald-50/50 text-emerald-800 border-emerald-200' : 'bg-red-50/50 text-red-800 border-red-200'}`}
                       aria-live="polite"
                     >
                       {formMessage.text}
@@ -452,70 +455,70 @@ export default function Home() {
                   <button 
                     type="submit" 
                     disabled={formLoading}
-                    className="w-full bg-black hover:bg-zinc-950 text-white font-semibold rounded-lg py-2.5 text-sm transition-colors duration-150 disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none"
+                    className="w-full bg-black hover:bg-zinc-900 active:scale-[0.96] text-white font-semibold rounded-lg py-2 text-xs transition-[background-color,transform] duration-150 disabled:opacity-50 focus-visible:ring-1 focus-visible:ring-black outline-none"
                   >
                     {formLoading ? 'Submitting…' : 'Submit Request'}
                   </button>
                 </form>
               </div>
             ) : (
-              /* MANAGER WORKSPACE: Approve Queue */
-              <div className="space-y-4">
-                <h2 className="text-lg font-bold flex items-center gap-2 text-zinc-800 text-balance">
-                  <Shield className="w-5 h-5 text-zinc-500" aria-hidden="true" /> Pending Approval Queue ({pendingCount})
+              /* MANAGER: Active Review Queue */
+              <div className="space-y-3">
+                <h2 className="text-sm font-bold flex items-center gap-2 text-zinc-950">
+                  <Shield className="w-4 h-4 text-zinc-500" aria-hidden="true" /> Pending Approval Queue ({pendingCount})
                 </h2>
                 
                 {loading ? (
-                  <div className="text-center py-8 text-zinc-500" aria-live="polite">Loading requests…</div>
+                  <div className="text-center py-6 text-xs text-zinc-400" aria-live="polite">Loading requests…</div>
                 ) : requests.filter(r => r.status === 'pending').length === 0 ? (
-                  <div className="bg-white border border-zinc-200 rounded-xl p-8 text-center text-zinc-400 shadow-sm">
+                  <div className="bg-white border border-zinc-200/80 rounded-xl p-8 text-center text-xs text-zinc-400 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
                     All clear! No pending approvals in queue.
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {requests
                       .filter(r => r.status === 'pending')
                       .map((req) => (
-                        <div key={req.id} className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-                          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                            <div className="space-y-2 flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase font-mono tracking-wider border ${
-                                  req.category === 'budget' ? 'bg-zinc-100 text-zinc-800 border-zinc-200' :
+                        <div key={req.id} className="bg-white border border-zinc-200/80 rounded-xl p-4 shadow-[0_1px_2px_rgba(0,0,0,0.01)] hover:border-zinc-300 transition-[border-color] duration-150">
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                            <div className="space-y-1.5 flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase font-mono tracking-wider border ${
+                                  req.category === 'budget' ? 'bg-zinc-50 text-zinc-800 border-zinc-200' :
                                   req.category === 'access' ? 'bg-purple-50 text-purple-800 border-purple-200' :
                                   'bg-amber-50 text-amber-800 border-amber-200'
                                 }`}>
                                   {req.category}
                                 </span>
-                                <span className="text-xs text-zinc-500 font-mono">By {req.requested_by}</span>
+                                <span className="text-[10px] text-zinc-400 font-mono">By {req.requested_by}</span>
                               </div>
-                              <h3 className="text-base font-bold text-zinc-800 truncate">{req.title}</h3>
-                              <p className="text-xs text-zinc-500 break-words">{req.description}</p>
+                              <h3 className="text-xs font-bold text-zinc-900 truncate">{req.title}</h3>
+                              <p className="text-[11px] text-zinc-400 leading-relaxed break-words">{req.description}</p>
                             </div>
                             
-                            <div className="text-right flex flex-col items-end gap-3 min-w-[120px]">
+                            <div className="text-left sm:text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2.5 min-w-[120px] pt-1">
                               {req.category !== 'access' && (
-                                <div className="text-lg font-bold font-mono text-zinc-800 font-variant-numeric-tabular-nums">
+                                <div className="text-sm font-bold font-mono text-zinc-950 font-variant-numeric-tabular-nums">
                                   AED {Number(req.amount).toLocaleString()}
                                 </div>
                               )}
                               
-                              <div className="flex gap-2">
+                              <div className="flex gap-1.5">
                                 <button 
                                   onClick={() => handleDecision(req.id, 'rejected')}
-                                  className="p-2 hover:bg-zinc-50 text-red-600 rounded-lg border border-zinc-200 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 outline-none"
-                                  aria-label={`Reject request for ${req.title}`}
+                                  className="w-8 h-8 flex items-center justify-center hover:bg-zinc-50 text-red-600 rounded-lg border border-zinc-200/80 active:scale-[0.96] transition-[background-color,transform] duration-150 focus-visible:ring-1 focus-visible:ring-red-600 outline-none"
+                                  aria-label={`Reject request: ${req.title}`}
                                   title="Reject"
                                 >
-                                  <XCircle className="w-4 h-4" aria-hidden="true" />
+                                  <XCircle className="w-3.5 h-3.5" aria-hidden="true" />
                                 </button>
                                 <button 
                                   onClick={() => handleDecision(req.id, 'approved')}
-                                  className="p-2 hover:bg-zinc-50 text-emerald-600 rounded-lg border border-zinc-200 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 outline-none"
-                                  aria-label={`Approve request for ${req.title}`}
+                                  className="w-8 h-8 flex items-center justify-center hover:bg-zinc-50 text-emerald-600 rounded-lg border border-zinc-200/80 active:scale-[0.96] transition-[background-color,transform] duration-150 focus-visible:ring-1 focus-visible:ring-emerald-600 outline-none"
+                                  aria-label={`Approve request: ${req.title}`}
                                   title="Approve"
                                 >
-                                  <CheckCircle className="w-4 h-4" aria-hidden="true" />
+                                  <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
                                 </button>
                               </div>
                             </div>
@@ -527,49 +530,49 @@ export default function Home() {
               </div>
             )}
 
-            {/* General History / Archive (visible to both) */}
-            <div className="space-y-4">
-              <h2 className="text-lg font-bold flex items-center gap-2 text-zinc-800 text-balance">
-                <Layers className="w-5 h-5 text-zinc-500" aria-hidden="true" /> Logged Activity History
+            {/* General Log / List (Visible to all, compact row design) */}
+            <div className="space-y-3">
+              <h2 className="text-sm font-bold flex items-center gap-2 text-zinc-950">
+                <Layers className="w-4 h-4 text-zinc-500" aria-hidden="true" /> Ledger History &amp; Decisions
               </h2>
               
               {loading ? (
-                <div className="text-center py-8 text-zinc-500" aria-live="polite">Loading history…</div>
+                <div className="text-center py-6 text-xs text-zinc-400" aria-live="polite">Loading history…</div>
               ) : requests.length === 0 ? (
-                <div className="text-center py-8 text-zinc-400">No logs found.</div>
+                <div className="text-center py-6 text-xs text-zinc-400">No records found.</div>
               ) : (
-                <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden divide-y divide-zinc-100 shadow-sm">
+                <div className="bg-white border border-zinc-200/80 rounded-xl overflow-hidden divide-y divide-zinc-100 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
                   {requests.map((req) => (
-                    <div key={req.id} className="p-4 hover:bg-zinc-50/50 transition-colors duration-150">
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div key={req.id} className="p-3.5 hover:bg-zinc-50/40 transition-colors duration-150">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="space-y-1 flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-xs font-bold text-zinc-800 truncate">{req.title}</span>
-                            <span className="text-[10px] text-zinc-400 font-mono">({req.requested_by})</span>
+                            <span className="text-[11px] font-bold text-zinc-800 truncate">{req.title}</span>
+                            <span className="text-[9px] text-zinc-400 font-mono">({req.requested_by})</span>
                           </div>
                           {req.decision_reason && (
-                            <p className="text-xs text-zinc-500 italic mt-1 flex items-center gap-1 break-words">
-                              <Info className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" aria-hidden="true" />
+                            <p className="text-[11px] text-zinc-400 italic flex items-center gap-1.5 break-words">
+                              <Info className="w-3 h-3 text-zinc-300 flex-shrink-0" aria-hidden="true" />
                               Note: {req.decision_reason}
                             </p>
                           )}
                         </div>
 
-                        <div className="flex items-center gap-4 justify-between md:justify-end">
+                        <div className="flex items-center gap-3.5 justify-between sm:justify-end">
                           {req.category !== 'access' && (
-                            <span className="text-xs font-mono font-semibold text-zinc-500 font-variant-numeric-tabular-nums">
+                            <span className="text-[11px] font-mono font-semibold text-zinc-500 font-variant-numeric-tabular-nums">
                               AED {Number(req.amount).toLocaleString()}
                             </span>
                           )}
                           
-                          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-bold uppercase font-mono tracking-wider border ${
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase font-mono tracking-wider border ${
                             req.status === 'approved' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' :
                             req.status === 'rejected' ? 'bg-red-50 text-red-800 border-red-200' :
                             'bg-amber-50 text-amber-800 border-amber-200'
                           }`}>
-                            {req.status === 'approved' && <CheckCircle className="w-3 h-3" aria-hidden="true" />}
-                            {req.status === 'rejected' && <XCircle className="w-3 h-3" aria-hidden="true" />}
-                            {req.status === 'pending' && <Clock className="w-3 h-3" aria-hidden="true" />}
+                            {req.status === 'approved' && <CheckCircle className="w-2.5 h-2.5" aria-hidden="true" />}
+                            {req.status === 'rejected' && <XCircle className="w-2.5 h-2.5" aria-hidden="true" />}
+                            {req.status === 'pending' && <Clock className="w-2.5 h-2.5" aria-hidden="true" />}
                             {req.status}
                           </span>
                         </div>
@@ -581,40 +584,36 @@ export default function Home() {
             </div>
           </main>
 
-          {/* RIGHT COLUMN: Sidebar info */}
-          <aside className="lg:col-span-4 space-y-6">
+          {/* RIGHT COLUMN: Sidebar info (Highly minimal & elegant) */}
+          <aside className="lg:col-span-4 space-y-4">
             
-            {/* Quick Session Info */}
-            <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-              <h3 className="text-xs font-bold mb-3 uppercase tracking-wider font-mono text-zinc-400">Current Session</h3>
-              <div className="space-y-3 text-xs">
+            {/* Quick Session Details */}
+            <div className="bg-white border border-zinc-200/80 rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-3">
+              <h3 className="text-[10px] font-bold uppercase tracking-wider font-mono text-zinc-400">Environment Details</h3>
+              <div className="space-y-2 text-xs">
                 <div>
-                  <div className="text-zinc-400 font-mono font-semibold">User Role</div>
-                  <div className="font-mono text-zinc-800 font-bold mt-0.5 capitalize">{role}</div>
+                  <div className="text-[10px] text-zinc-400 font-medium">Session Role</div>
+                  <div className="font-mono text-zinc-800 font-bold mt-0.5 capitalize text-[11px]">{role}</div>
                 </div>
                 <hr className="border-zinc-100" />
                 <div>
-                  <div className="text-zinc-400 font-mono font-semibold">Session Email</div>
-                  <div className="font-mono text-zinc-800 font-bold mt-0.5 select-all">{currentUser}</div>
+                  <div className="text-[10px] text-zinc-400 font-medium">Active Email</div>
+                  <div className="font-mono text-zinc-800 font-bold mt-0.5 text-[11px] select-all">{currentUser}</div>
                 </div>
               </div>
             </div>
 
-            {/* Architecture Card */}
-            <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-              <h3 className="text-xs font-bold mb-3 uppercase tracking-wider font-mono text-zinc-400">System Architecture</h3>
-              <ul className="space-y-3 text-xs text-zinc-500">
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                  <span><strong>Next.js 14 App Router</strong>: Leverages react hooks for state management.</span>
+            {/* Micro Architecture Metadata */}
+            <div className="bg-white border border-zinc-200/80 rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-2.5">
+              <h3 className="text-[10px] font-bold uppercase tracking-wider font-mono text-zinc-400">System Parameters</h3>
+              <ul className="space-y-2 text-[11px] text-zinc-400">
+                <li className="flex items-start gap-1.5">
+                  <ChevronRight className="w-3 h-3 text-zinc-300 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                  <span><strong>Next.js 14 Engine</strong>: React state engine client.</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                  <span><strong>Supabase Integration</strong>: Database syncing queries connected to active cloud PostgreSQL tables.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                  <span><strong>Zero-Config Fallback</strong>: Recruiter bypass settings allow incognito testing without `.env` setup.</span>
+                <li className="flex items-start gap-1.5">
+                  <ChevronRight className="w-3 h-3 text-zinc-300 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                  <span><strong>Local Failover</strong>: Auto-activates on egress failures.</span>
                 </li>
               </ul>
             </div>
@@ -623,45 +622,45 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Decision Dialog Modal (Approve / Reject reasons) */}
+      {/* Decision Dialog Modal */}
       {activeDecisionId && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="bg-white border border-zinc-200 rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl">
-            <h3 id="modal-title" className="text-base font-bold text-zinc-800">
-              Confirm {decisionType === 'approved' ? 'Approval' : 'Rejection'} Decision
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-[2px] flex items-center justify-center p-4 z-50 animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+          <div className="bg-white border border-zinc-200/90 rounded-xl max-w-sm w-full p-5 space-y-3.5 shadow-xl">
+            <h3 id="modal-title" className="text-sm font-bold text-zinc-950">
+              Confirm {decisionType === 'approved' ? 'Approval' : 'Rejection'}
             </h3>
-            <p className="text-xs text-zinc-500">
+            <p className="text-[11px] text-zinc-400">
               Provide an optional comment or justification note for the applicant.
             </p>
             
             <div>
-              <label htmlFor="decision-note" className="block text-[10px] text-zinc-400 uppercase font-mono mb-1.5 font-bold">Decision Note / Comment</label>
+              <label htmlFor="decision-note" className="block text-[9px] text-zinc-400 uppercase font-mono mb-1 font-semibold tracking-wider">Decision Note</label>
               <textarea 
                 id="decision-note"
                 value={decisionReason}
                 onChange={(e) => setDecisionReason(e.target.value)}
                 placeholder={decisionType === 'approved' ? 'e.g. Budget approved for H1 usage…' : 'e.g. Please use shared Llama keys instead…'}
-                rows={3}
-                className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-800 transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none focus:border-transparent resize-none"
+                rows={2}
+                className="w-full bg-white border border-zinc-200 rounded-lg px-2.5 py-1.5 text-xs text-zinc-800 transition-[border-color,box-shadow] duration-150 focus-visible:ring-1 focus-visible:ring-black outline-none focus:border-zinc-400 resize-none"
               ></textarea>
             </div>
 
-            <div className="flex gap-3 justify-end text-xs font-semibold">
+            <div className="flex gap-2 justify-end text-xs font-semibold">
               <button 
                 onClick={() => setActiveDecisionId(null)}
-                className="px-4 py-2 border border-zinc-200 text-zinc-500 hover:text-zinc-800 rounded-lg transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 outline-none"
+                className="px-3.5 py-1.5 border border-zinc-200 text-zinc-500 hover:text-zinc-800 rounded-lg transition-colors duration-150 active:scale-[0.96]"
                 disabled={actionLoading}
               >
                 Cancel
               </button>
               <button 
                 onClick={submitDecision}
-                className={`px-4 py-2 rounded-lg text-white transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-2 outline-none ${
-                  decisionType === 'approved' ? 'bg-emerald-600 hover:bg-emerald-500 focus-visible:ring-emerald-600' : 'bg-red-600 hover:bg-red-500 focus-visible:ring-red-600'
+                className={`px-3.5 py-1.5 rounded-lg text-white transition-[background-color,transform] duration-150 active:scale-[0.96] ${
+                  decisionType === 'approved' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-red-600 hover:bg-red-500'
                 }`}
                 disabled={actionLoading}
               >
-                {actionLoading ? 'Processing…' : 'Confirm'}
+                {actionLoading ? 'Confirming…' : 'Confirm'}
               </button>
             </div>
           </div>
