@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { db } from '@/lib/supabase';
 import { 
   PlusCircle, 
   CheckCircle, 
@@ -67,10 +67,7 @@ export default function Home() {
   const loadRequests = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('mal_requests')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await db.fetchAll();
 
       if (error) throw error;
       if (data) setRequests(data as RequestItem[]);
@@ -120,18 +117,14 @@ export default function Home() {
     setFormMessage(null);
 
     try {
-      const { error } = await supabase
-        .from('mal_requests')
-        .insert([
-          {
-            title,
-            description,
-            requested_by: currentUser,
-            amount: numAmount,
-            category,
-            status: 'pending'
-          }
-        ]);
+      const { error } = await db.insert({
+        title,
+        description,
+        requested_by: currentUser,
+        amount: numAmount,
+        category,
+        status: 'pending'
+      });
 
       if (error) throw error;
 
@@ -159,15 +152,12 @@ export default function Home() {
     setActionLoading(true);
 
     try {
-      const { error } = await supabase
-        .from('mal_requests')
-        .update({
-          status: decisionType,
-          decision_reason: decisionReason || (decisionType === 'approved' ? 'Approved by lead manager.' : 'Rejected by lead manager.'),
-          decided_at: new Date().toISOString(),
-          decided_by: currentUser
-        })
-        .eq('id', activeDecisionId);
+      const { error } = await db.update(activeDecisionId, {
+        status: decisionType,
+        decision_reason: decisionReason || (decisionType === 'approved' ? 'Approved by lead manager.' : 'Rejected by lead manager.'),
+        decided_at: new Date().toISOString(),
+        decided_by: currentUser
+      });
 
       if (error) throw error;
 
